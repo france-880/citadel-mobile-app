@@ -1,0 +1,65 @@
+name: citadel
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.19.0
+
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1  # GOOGLE FONTS PACKAGE (OPTIONAL)
+  qr_flutter: ^4.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:   # IMAGE ASSETS
+    - assets/images/calendar_icon.png
+
+  fonts:    # CUSTOM FONT
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/Sora-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Sora-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Sora-Medium.ttf
+          weight: 500
+    - family: Newsreader
+      fonts:
+        - asset: assets/fonts/Newsreader-Bold.ttf
+          weight: 700
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+    - family: WorkSans
+      fonts:
+        - asset: assets/fonts/WorkSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/WorkSans-Medium.ttf
+          weight: 500
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+    - family: Trispace
+      fonts:
+        - asset: assets/fonts/Trispace-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Trispace-Light.ttf
+          weight: 300
