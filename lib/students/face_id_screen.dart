@@ -14,20 +14,37 @@ class _FaceIDScreenState extends State<FaceIDScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      backgroundColor: const Color(0xFFFFFFFF),
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: _isRegistered
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Face ID",
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Poppins",
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: _isRegistered
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                     // Avatar with green check
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const CircleAvatar(
                           radius: 50,
-                          backgroundColor: Colors.grey,
+                          backgroundColor: const Color(0xFFFFFFFF),
                           child: Icon(
                             Icons.person,
                             size: 60,
@@ -56,8 +73,9 @@ class _FaceIDScreenState extends State<FaceIDScreen> {
                       "Face ID Registered",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 22,
+                        fontSize: 23,
                         fontWeight: FontWeight.bold,
+                        fontFamily: "Poppins",
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -79,7 +97,7 @@ class _FaceIDScreenState extends State<FaceIDScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF064F32), // dark green
+                          backgroundColor: const Color(0xFFFFFFFF),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
@@ -148,7 +166,7 @@ class _FaceIDScreenState extends State<FaceIDScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF064F32),
+                          backgroundColor: const Color(0xFFFFFFFF),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
@@ -168,6 +186,11 @@ class _FaceIDScreenState extends State<FaceIDScreen> {
                     ),
                   ],
                 ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

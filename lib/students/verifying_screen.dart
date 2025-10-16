@@ -43,7 +43,7 @@ class _VerifyingScreenState extends State<VerifyingScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF064F32),
+                  backgroundColor: const Color(0xFFFFFFFF),
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -66,21 +66,38 @@ class _VerifyingScreenState extends State<VerifyingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FCF9),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: const Icon(Icons.close, size:30),
-                onPressed: () => Navigator.pop(context),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Verifying",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Poppins",
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size:30),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
-            ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: Column(
+                  children: [
             const Spacer(),
             const Text(
               "Verifying...",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold, fontFamily: "Poppins"),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -90,11 +107,15 @@ class _VerifyingScreenState extends State<VerifyingScreen> {
             const SizedBox(height: 40),
             const CircleAvatar(
               radius: 100,
-              backgroundColor: Colors.green,
+              backgroundColor: const Color(0xFFFFFFFF),
               child: Icon(Icons.person, size: 120, color: Colors.white),
             ),
             const Spacer(),
-          ],
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

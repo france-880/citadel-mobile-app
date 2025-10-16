@@ -15,6 +15,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1  # GOOGLE FONTS PACKAGE (OPTIONAL)
   qr_flutter: ^4.1.0
+  mobile_scanner: ^5.0.0
+  camera: ^0.10.5+9
+  dio: ^5.9.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -27,6 +31,8 @@ flutter:
 
   assets:   # IMAGE ASSETS
     - assets/images/calendar_icon.png
+    - assets/images/ucc_logo.png
+    - assets/images/section_banner.jpg
 
   fonts:    # CUSTOM FONT
     - family: Sora

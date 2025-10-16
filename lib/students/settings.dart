@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:citadel/common/login_page.dart'; 
+
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
@@ -26,25 +28,28 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-  appBar: AppBar(
-    backgroundColor: const Color(0xFFF9FFFA),
-    title: const Text(
-      "Settings",
-      style: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  ),
-    
-       backgroundColor: const Color(0xFFF9FFFA),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                "Settings",
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Poppins",
+                ),
+              ),
+              const SizedBox(height: 24),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
               // Profile Header
               Row(
                 children: [
@@ -125,10 +130,16 @@ class Settings extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Sign out
+
+
               GestureDetector(
                 onTap: () {
-                  // TODO: Add logout logic
+                  // TODO: Optional - add logout logic here (e.g., clear shared prefs, tokens)
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
                 },
                 child: Row(
                   children: const [
@@ -137,9 +148,16 @@ class Settings extends StatelessWidget {
                     Text(
                       "Sign Out",
                       style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.bold),
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
+                ),
+              ),
+
+                    ],
+                  ),
                 ),
               ),
             ],

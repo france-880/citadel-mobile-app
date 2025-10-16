@@ -43,7 +43,7 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -59,18 +59,15 @@ class _AttendancePageState extends State<AttendancePage> {
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        "Attendance",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Sora",
-                        ),
-                      ),
+                  const Text(
+                    "Attendance",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Poppins",
                     ),
                   ),
+                  const Spacer(),
                   Container(
                     margin: const EdgeInsets.only(right: 8),
                     child: InkWell(

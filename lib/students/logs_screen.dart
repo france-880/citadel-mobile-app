@@ -25,6 +25,8 @@ class _LogsScreenState extends State<LogsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
         title: const Text("Logs"),
         leading: IconButton(

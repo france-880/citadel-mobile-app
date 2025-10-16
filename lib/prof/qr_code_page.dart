@@ -37,8 +37,8 @@ class QRCodePage extends StatelessWidget {
                     const Text(
                       "Scan QR Code",
                       style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
                         fontFamily: "Poppins",
                       ),
                     ),

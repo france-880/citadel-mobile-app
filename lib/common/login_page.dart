@@ -34,8 +34,8 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Image.asset(
                   "assets/images/ucc_logo.png",
-                  width: 330,
-                  height: 330,
+                  width: 190,
+                  height: 190,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -143,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
         _buildButton("Login", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-            //  MaterialPageRoute(builder: (context) => StudentDashboardScreen()),
+            MaterialPageRoute(builder: (context) => StudentDashboardScreen()),
+            // MaterialPageRoute(builder: (context) => HomePage()),
           );
         }),
       ],

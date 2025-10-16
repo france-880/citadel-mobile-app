@@ -89,7 +89,7 @@ class ProgramPage extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 0.7,
+                    childAspectRatio: 0.65,
                   ),
                   itemBuilder: (context, index) {
                     final program = programs[index];
@@ -108,25 +108,26 @@ class ProgramPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
                                 program["image"]!,
-                                height: 100,
+                                height: 80,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             Text(
                               program["title"]!,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontFamily: "Sora",
                               ),
                             ),
+                            const SizedBox(height: 2),
                             Text(
                               program["students"]!,
                               style: const TextStyle(
                                 color: Colors.grey,
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontFamily: "Roboto",
                                 fontWeight: FontWeight.w500,
                               ),
@@ -145,22 +146,23 @@ class ProgramPage extends StatelessWidget {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFF1F8E9),
+                                  backgroundColor: const Color(0xFFFFFFFF),
                                   foregroundColor: const Color(0xFF57955A),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 10,
+                                    horizontal: 16,
+                                    vertical: 8,
                                   ),
+                                  minimumSize: const Size(0, 32),
                                 ),
                                 child: const Text(
                                   "Attendance",
                                   style: TextStyle(
                                     fontFamily: "Sora",
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 12,
+                                    fontSize: 11,
                                   ),
                                 ),
                               ),

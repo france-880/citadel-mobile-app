@@ -13,19 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   String _formatDate(DateTime dt) {
     const weekdays = [
@@ -58,42 +45,55 @@ class _HomePageState extends State<HomePage> {
     return '$weekday, $month ${dt.day}, ${dt.year}';
   }
 
+  Widget _getCurrentPage(String today) {
+    switch (_selectedIndex) {
+      case 0:
+        return _buildHomeContent(today); // 🏠 Home
+      case 1:
+        return const SchedulePage(); // 📅 Schedule
+      case 2:
+        return const ProgramPage(); // 🎓 Program
+      case 3:
+        return const Settings(); // ⚙️ Settings
+      default:
+        return _buildHomeContent(today); // Default to Home
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final today = _formatDate(DateTime.now());
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() => _selectedIndex = index);
-        },
-        children: [
-          _buildHomeContent(today), // 🏠 Home
-          const SchedulePage(), // 📅 Schedule
-          const ProgramPage(), // 🎓 Program
-          const Settings(), // ⚙️ Settings
-        ],
-      ),
+      body: _getCurrentPage(today),
 
       // 🔹 Bottom Navigation
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-            _pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          });
-        },
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              offset: const Offset(0, -2),
+              blurRadius: 4,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          elevation: 0, // Remove default elevation
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
@@ -106,6 +106,7 @@ class _HomePageState extends State<HomePage> {
             label: "Settings",
           ),
         ],
+        ),
       ),
     );
   }
@@ -315,9 +316,13 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = 1; // Navigate to Schedule tab
+                    });
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF1F8E9),
+                    backgroundColor: const Color(0xFFFFFFFF),
                     foregroundColor: const Color(0xFF57955A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -442,7 +447,7 @@ class _HomePageState extends State<HomePage> {
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -451,51 +456,53 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
                 imageUrl,
-                height: 100,
+                height: 80,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Text(
               title,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 15,
+                fontSize: 14,
                 fontFamily: "Sora",
               ),
             ),
+            const SizedBox(height: 2),
             Text(
               students,
               style: const TextStyle(
                 color: Color(0xFFAEAEAE),
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
                 fontFamily: "Roboto",
               ),
             ),
-            const Spacer(),
+            const SizedBox(height: 8),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: onPressed,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF1F8E9),
+                  backgroundColor: const Color(0xFFFFFFFF),
                   foregroundColor: const Color(0xFF57955A),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
+                    horizontal: 16,
+                    vertical: 8,
                   ),
+                  minimumSize: const Size(0, 32),
                 ),
                 child: const Text(
                   "See more",
                   style: TextStyle(
                     fontFamily: "Sora",
                     fontWeight: FontWeight.w600,
-                    fontSize: 12,
+                    fontSize: 11,
                   ),
                 ),
               ),
