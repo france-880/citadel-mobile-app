@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'common/splash_screen.dart';
 import 'common/login_page.dart';
 import 'common/forgot_password_page.dart';
+import 'common/api_test_page.dart';
 
 void main() {
   runApp(const MyApp());
