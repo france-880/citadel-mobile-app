@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../common/set_new_password_page.dart';
+import 'set_new_password_page.dart';
 
 class CheckEmailPage extends StatefulWidget {
   const CheckEmailPage({super.key});
@@ -22,7 +22,7 @@ class _CheckEmailPageState extends State<CheckEmailPage>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-
+    
     _fadeIn = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
     _bounce = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.elasticOut),

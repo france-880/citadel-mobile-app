@@ -50,7 +50,7 @@ class ProgramPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            // 🏷️ Header
             const Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
@@ -79,23 +79,30 @@ class ProgramPage extends StatelessWidget {
               ),
             ),
 
-            // Grid of program cards
+            // 🧩 Grid of Program Cards
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GridView.builder(
+                  // ✅ Added bottom padding to prevent obstruction
+                  padding: const EdgeInsets.only(bottom: 100),
                   itemCount: programs.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.65,
+                    mainAxisSpacing: 8,
+                    childAspectRatio:
+                        MediaQuery.of(context).size.width < 400
+                            ? 0.68
+                            : (MediaQuery.of(context).size.width < 600
+                                ? 0.75
+                                : 0.8),
                   ),
                   itemBuilder: (context, index) {
                     final program = programs[index];
                     return Card(
-                      elevation: 4,
-                      color: Colors.white,
+                      elevation: 3,
+                      color: const Color(0xFFFFFFFF),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -108,26 +115,25 @@ class ProgramPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
                                 program["image"]!,
-                                height: 80,
+                                height: 100,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 10),
                             Text(
                               program["title"]!,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontFamily: "Sora",
                               ),
                             ),
-                            const SizedBox(height: 2),
                             Text(
                               program["students"]!,
                               style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
+                                color: Color(0XFF717171),
+                                fontSize: 13,
                                 fontFamily: "Roboto",
                                 fontWeight: FontWeight.w500,
                               ),
@@ -146,23 +152,22 @@ class ProgramPage extends StatelessWidget {
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFFFFFFF),
+                                  backgroundColor: const Color(0xFFF1F8E9),
                                   foregroundColor: const Color(0xFF57955A),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 8,
+                                    horizontal: 20,
+                                    vertical: 10,
                                   ),
-                                  minimumSize: const Size(0, 32),
                                 ),
                                 child: const Text(
                                   "Attendance",
                                   style: TextStyle(
                                     fontFamily: "Sora",
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 11,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),

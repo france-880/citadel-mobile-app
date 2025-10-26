@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
 
@@ -12,7 +11,9 @@ class SchedulePage extends StatefulWidget {
 class _SchedulePageState extends State<SchedulePage> {
   final now = DateTime.now();
   late String selectedDay;
-  final weekDays = ["S", "M", "T", "W", "TH", "F", "S"];
+
+  final weekDays = ["S", "M", "T", "W", "T", "F", "S"];
+  final weekDayCodes = ["SU", "M", "TU", "W", "TH", "F", "SA"];
 
   final schedules = [
     {
@@ -60,11 +61,44 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    selectedDay = DateFormat('E').format(now).substring(0, 1).toUpperCase();
+    selectedDay = getWeekDayCode(now);
+  }
+
+  String getWeekDayCode(DateTime date) {
+    switch (DateFormat('E').format(date).toUpperCase()) {
+      case "SUN":
+        return "SU";
+      case "MON":
+        return "M";
+      case "TUE":
+        return "TU";
+      case "WED":
+        return "W";
+      case "THU":
+        return "TH";
+      case "FRI":
+        return "F";
+      case "SAT":
+        return "SA";
+      default:
+        return "";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Responsive sizes
+    final circleSize = screenWidth * 0.11;
+    final circleFontSize = circleSize * 0.4;
+    final timeLabelWidth = screenWidth * 0.15;
+    final timeFontSize = screenWidth * 0.035;
+    final cardFontSize = screenWidth * 0.043;
+    final codeFontSize = screenWidth * 0.035;
+    final roomFontSize = screenWidth * 0.035;
+
     final day = DateFormat('d').format(now);
     final year = DateFormat('y').format(now);
     final month = DateFormat('MMMM').format(now);
@@ -73,29 +107,29 @@ class _SchedulePageState extends State<SchedulePage> {
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          padding: EdgeInsets.fromLTRB(screenWidth * 0.04, 16, screenWidth * 0.04, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "My Schedule",
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: screenWidth * 0.06,
                   fontWeight: FontWeight.bold,
                   fontFamily: "Poppins",
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: screenHeight * 0.005),
               Text(
                 "1st Semester",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: screenWidth * 0.038,
                   fontFamily: "Roboto",
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF8C8C8C),
+                  color: const Color(0xFF8C8C8C),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: screenHeight * 0.03),
 
               // 📅 Date Header
               Row(
@@ -107,27 +141,27 @@ class _SchedulePageState extends State<SchedulePage> {
                     height: 38,
                     color: Colors.black87,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: screenWidth * 0.02),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         day,
-                        style: const TextStyle(
-                          fontSize: 38,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.09,
                           fontWeight: FontWeight.bold,
                           fontFamily: "Sora",
                           color: Colors.black87,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: screenWidth * 0.02),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             year,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.05,
                               fontWeight: FontWeight.w600,
                               fontFamily: "Sora",
                               color: Colors.black87,
@@ -135,8 +169,8 @@ class _SchedulePageState extends State<SchedulePage> {
                           ),
                           Text(
                             month,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.05,
                               fontWeight: FontWeight.w600,
                               fontFamily: "Sora",
                               color: Colors.black87,
@@ -148,35 +182,36 @@ class _SchedulePageState extends State<SchedulePage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight * 0.025),
 
               // 🗓️ Weekday Bar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(weekDays.length, (index) {
-                  final letter = weekDays[index];
-                  final isSelected = letter == selectedDay;
+                  final displayLetter = weekDays[index];
+                  final code = weekDayCodes[index];
+                  final isSelected = code == selectedDay;
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedDay = letter;
+                        selectedDay = code;
                       });
                     },
                     child: Container(
-                      width: 40,
-                      height: 36,
+                      width: circleSize,
+                      height: circleSize,
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.green[200]
-                            : Colors.grey[200],
+                        color:
+                            isSelected ? Colors.green[200] : Colors.grey[200],
                         shape: BoxShape.circle,
                       ),
                       child: Center(
                         child: Text(
-                          letter,
+                          displayLetter,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontFamily: "Sora",
+                            fontSize: circleFontSize,
                             color: isSelected
                                 ? Colors.green[900]
                                 : Colors.black87,
@@ -187,11 +222,12 @@ class _SchedulePageState extends State<SchedulePage> {
                   );
                 }),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight * 0.025),
 
               // ⏰ Time + Schedule Cards
               Expanded(
                 child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: screenHeight * 0.12),
                   itemCount: schedules.length,
                   itemBuilder: (context, index) {
                     final sched = schedules[index];
@@ -199,20 +235,18 @@ class _SchedulePageState extends State<SchedulePage> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Time label
                           SizedBox(
-                            width: 60,
-                            child: buildTimeLabel(sched["time"] as String),
+                            width: timeLabelWidth,
+                            child: buildTimeLabel(
+                              sched["time"] as String,
+                              fontSize: timeFontSize,
+                            ),
                           ),
-
-                          // 🔹 Divider line (stretched per row → tuloy-tuloy look)
                           const VerticalDivider(
                             width: 20,
                             thickness: 1,
                             color: Colors.grey,
                           ),
-
-                          // Schedule card
                           Expanded(
                             child: buildScheduleCard(
                               subject: sched["subject"] as String,
@@ -221,6 +255,9 @@ class _SchedulePageState extends State<SchedulePage> {
                               section: sched["section"] as String,
                               time: sched["time"] as String,
                               isActive: sched["isActive"] as bool,
+                              cardFontSize: cardFontSize,
+                              codeFontSize: codeFontSize,
+                              roomFontSize: roomFontSize,
                             ),
                           ),
                         ],
@@ -236,13 +273,13 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-  Widget buildTimeLabel(String text) {
+  Widget buildTimeLabel(String text, {required double fontSize}) {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 12,
+        style: TextStyle(
+          fontSize: fontSize,
           fontWeight: FontWeight.w500,
           fontFamily: "Sora",
           color: Colors.black87,
@@ -252,60 +289,63 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget buildScheduleCard({
-  required String subject,
-  required String code,
-  required String room,
-  required String section,
-  required String time,
-  required bool isActive,
-}) {
-  return Card(
-    elevation: 3,
-    margin: const EdgeInsets.symmetric(vertical: 8),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    color: isActive ? Colors.green[100] : const Color(0xFFF3F3F3),
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            subject,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Sora",
-              color: isActive ? Colors.green[900] : Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            code,
-            style: const TextStyle(
-              fontSize: 14,
-              fontFamily: "Sora",
-              color: Colors.grey,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "$room\n$section",
-                style: const TextStyle(fontSize: 13, fontFamily: "Sora"),
-              ),
-              Text(
-                time,
-                style: const TextStyle(fontSize: 13, fontFamily: "Sora"),
-              ),
-            ],
-          ),
-        ],
+    required String subject,
+    required String code,
+    required String room,
+    required String section,
+    required String time,
+    required bool isActive,
+    required double cardFontSize,
+    required double codeFontSize,
+    required double roomFontSize,
+  }) {
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
-    ),
-  );
-}
+      color: isActive ? const Color.fromRGBO(200, 230, 201, 1) : const Color(0xFFF3F3F3),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              subject,
+              style: TextStyle(
+                fontSize: cardFontSize,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Sora",
+                color: isActive ? Colors.green[900] : Colors.black87,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              code,
+              style: TextStyle(
+                fontSize: codeFontSize,
+                fontFamily: "Sora",
+                color: Colors.grey,
+              ),
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "$room\n$section",
+                  style: TextStyle(fontSize: roomFontSize, fontFamily: "Sora"),
+                ),
+                Text(
+                  time,
+                  style: TextStyle(fontSize: roomFontSize, fontFamily: "Sora"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -16,15 +16,37 @@ class QRCodePage extends StatelessWidget {
               // 🔹 Custom AppBar (like AttendancePage)
               Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.black87,
+                  // 🔸 Back Button (updated style)
+                  Container(
+                    margin: const EdgeInsets.only(left: 8),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withAlpha(77),
+                              spreadRadius: 1,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Color(0xFF000000),
+                          size: 24,
+                        ),
+                      ),
                     ),
-                    onPressed: () => Navigator.pop(context),
                   ),
-                
-                  const SizedBox(width: 48), // same width as back button to balance
+
+                  const SizedBox(width: 48), // same width as back button to center title
                 ],
               ),
               const SizedBox(height: 32),
@@ -37,8 +59,8 @@ class QRCodePage extends StatelessWidget {
                     const Text(
                       "Scan QR Code",
                       style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
                         fontFamily: "Poppins",
                       ),
                     ),
@@ -70,6 +92,7 @@ class QRCodePage extends StatelessWidget {
                         data: "https://ucc-attendance.com/confirm",
                         version: QrVersions.auto,
                         size: 250,
+                        // ignore: deprecated_member_use
                         foregroundColor: Colors.black,
                       ),
                     ),

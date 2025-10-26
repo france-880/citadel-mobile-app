@@ -19,6 +19,8 @@ dependencies:
   camera: ^0.10.5+9
   dio: ^5.9.0
   shared_preferences: ^2.5.3
+  image_picker: ^1.1.1 
+  flutter_svg: ^2.1.1
 
 dev_dependencies:
   flutter_test:
