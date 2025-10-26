@@ -7,11 +7,12 @@ class FacialVerificationScreen extends StatefulWidget {
   const FacialVerificationScreen({super.key});
 
   @override
-  State<FacialVerificationScreen> createState() => _FacialVerificationScreenState();
+  State<FacialVerificationScreen> createState() =>
+      _FacialVerificationScreenState();
 }
 
 class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
-  bool _showFacialVerification = true;
+  final bool _showFacialVerification = true;
   CameraController? _cameraController;
   bool _isCameraInitialized = false;
   bool _isInitializing = false;
@@ -32,19 +33,19 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
 
   Future<void> _initializeCamera() async {
     if (_isInitializing) return;
-    
+
     setState(() {
       _isInitializing = true;
     });
-    
+
     try {
       // Get available cameras
       _cameras = await availableCameras();
-      
+
       if (_cameras == null || _cameras!.isEmpty) {
         throw Exception('No cameras found');
       }
-      
+
       // Find front camera
       CameraDescription? frontCamera;
       for (var camera in _cameras!) {
@@ -53,24 +54,24 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
           break;
         }
       }
-      
+
       if (frontCamera == null) {
         throw Exception('Front camera not found');
       }
-      
+
       // Dispose existing controller if any
       await _cameraController?.dispose();
-      
+
       // Initialize camera controller
       _cameraController = CameraController(
         frontCamera,
         ResolutionPreset.medium,
         enableAudio: false,
       );
-      
+
       // Initialize the camera
       await _cameraController!.initialize();
-      
+
       if (mounted) {
         setState(() {
           _isCameraInitialized = true;
@@ -78,7 +79,7 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
         });
       }
     } catch (e) {
-      print('Error initializing camera: $e');
+      debugPrint('Error initializing camera: $e');
       if (mounted) {
         setState(() {
           _isInitializing = false;
@@ -99,7 +100,6 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
     }
   }
 
-
   void _startFaceDetection() {
     // Simulate automatic face detection after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
@@ -119,15 +119,13 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
         duration: Duration(seconds: 2),
       ),
     );
-    
+
     // Navigate to success screen with student details
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => const VerifyingScreen(),
-          ),
+          MaterialPageRoute(builder: (context) => const VerifyingScreen()),
         );
       }
     });
@@ -161,9 +159,7 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
                 ],
               ),
               const SizedBox(height: 4),
-              Expanded(
-                child: _buildFacialVerification(),
-              ),
+              Expanded(child: _buildFacialVerification()),
             ],
           ),
         ),
@@ -177,7 +173,11 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
         const SizedBox(height: 20),
         const Text(
           "Facial Verification",
-          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold, fontFamily: "Poppins"),
+          style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Poppins",
+          ),
         ),
         const SizedBox(height: 8),
         const Text(
@@ -185,7 +185,7 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30),
-        
+
         // Face Camera Preview Area
         Expanded(
           child: Container(
@@ -221,7 +221,7 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
                               ),
                             const SizedBox(height: 16),
                             Text(
-                              _isInitializing 
+                              _isInitializing
                                   ? "Initializing Camera..."
                                   : "Camera not available",
                               style: const TextStyle(
@@ -246,7 +246,7 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
                         ),
                       ),
                     ),
-                  
+
                   // Face Position Guide
                   Center(
                     child: Container(
@@ -257,15 +257,11 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
                         border: Border.all(color: Colors.blue, width: 3),
                       ),
                       child: const Center(
-                        child: Icon(
-                          Icons.face,
-                          size: 80,
-                          color: Colors.blue,
-                        ),
+                        child: Icon(Icons.face, size: 80, color: Colors.blue),
                       ),
                     ),
                   ),
-                  
+
                   // Instructions
                   Positioned(
                     bottom: 50,
@@ -296,15 +292,15 @@ class _FacialVerificationScreenState extends State<FacialVerificationScreen> {
             ),
           ),
         ),
-        
+
         const SizedBox(height: 20),
-        
+
         // Auto Verification Status
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.blue.withAlpha((0.1 * 255).round()),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.blue, width: 1),
           ),

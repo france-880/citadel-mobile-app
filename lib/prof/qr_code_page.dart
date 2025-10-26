@@ -6,6 +6,7 @@ class QRCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
@@ -23,8 +24,10 @@ class QRCodePage extends StatelessWidget {
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
-                
-                  const SizedBox(width: 48), // same width as back button to balance
+
+                  const SizedBox(
+                    width: 48,
+                  ), // same width as back button to balance
                 ],
               ),
               const SizedBox(height: 32),
@@ -70,7 +73,12 @@ class QRCodePage extends StatelessWidget {
                         data: "https://ucc-attendance.com/confirm",
                         version: QrVersions.auto,
                         size: 250,
-                        foregroundColor: Colors.black,
+                        // Use app theme colors so the QR adapts to the app theme.
+                        dataModuleStyle: QrDataModuleStyle(color: primaryColor),
+                        eyeStyle: QrEyeStyle(
+                          eyeShape: QrEyeShape.circle,
+                          color: primaryColor,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 30),

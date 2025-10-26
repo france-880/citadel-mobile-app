@@ -176,7 +176,7 @@ class _AttendancePageState extends State<AttendancePage> {
                         fontFamily: 'Sora',
                       ),
                     ),
-                     SizedBox(width: 60),
+                    SizedBox(width: 60),
                     Text(
                       "Attendance",
                       style: TextStyle(
@@ -199,7 +199,7 @@ class _AttendancePageState extends State<AttendancePage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
+                        color: Colors.black.withAlpha((0.08 * 255).round()),
                         blurRadius: 8,
                         spreadRadius: 1,
                         offset: const Offset(0, 6),
@@ -214,7 +214,10 @@ class _AttendancePageState extends State<AttendancePage> {
 
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 6),
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 12,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -273,7 +276,11 @@ class _AttendancePageState extends State<AttendancePage> {
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: isChecked
-                                    ? const Icon(Icons.check, size: 16, color: Colors.white)
+                                    ? const Icon(
+                                        Icons.check,
+                                        size: 16,
+                                        color: Colors.white,
+                                      )
                                     : null,
                               ),
                             ),

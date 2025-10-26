@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1 * 255).round()),
               offset: const Offset(0, -2),
               blurRadius: 4,
               spreadRadius: 0,
@@ -94,18 +94,21 @@ class _HomePageState extends State<HomePage> {
           selectedItemColor: Colors.green,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: "Schedule",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.school), label: "Programs"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "Settings",
-          ),
-        ],
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month),
+              label: "Schedule",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.school),
+              label: "Programs",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "Settings",
+            ),
+          ],
         ),
       ),
     );

@@ -1,6 +1,6 @@
 name: citadel
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -13,12 +13,16 @@ dependencies:
   intl: ^0.19.0
 
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.2.1  # GOOGLE FONTS PACKAGE (OPTIONAL)
+  google_fonts: ^6.2.1
   qr_flutter: ^4.1.0
-  mobile_scanner: ^5.0.0
-  camera: ^0.10.5+9
+  camera: ^0.11.0+6
+  mobile_scanner: ^7.1.2
+
+  http: ^1.5.0
   dio: ^5.9.0
-  shared_preferences: ^2.5.3
+  convert: ^3.0.2
+  provider: ^6.0.5
+  shared_preferences: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -29,12 +33,10 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  assets:   # IMAGE ASSETS
+  assets: # IMAGE ASSETS
     - assets/images/calendar_icon.png
-    - assets/images/ucc_logo.png
-    - assets/images/section_banner.jpg
 
-  fonts:    # CUSTOM FONT
+  fonts: # CUSTOM FONT
     - family: Sora
       fonts:
         - asset: assets/fonts/Sora-SemiBold.ttf
