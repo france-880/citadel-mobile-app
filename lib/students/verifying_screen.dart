@@ -54,7 +54,10 @@ class _VerifyingScreenState extends State<VerifyingScreen> {
                   Navigator.pop(context); // back to QR Scanner
                   Navigator.pop(context); // back to MySchedule
                 },
-                child: const Text("Done", style: TextStyle(color: Colors.white)),
+                child: const Text(
+                  "Done",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -85,7 +88,7 @@ class _VerifyingScreenState extends State<VerifyingScreen> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, size:30),
+                    icon: const Icon(Icons.close, size: 30),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -94,23 +97,27 @@ class _VerifyingScreenState extends State<VerifyingScreen> {
               Expanded(
                 child: Column(
                   children: [
-            const Spacer(),
-            const Text(
-              "Verifying...",
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold, fontFamily: "Poppins"),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "Please align your face within the circle\nto verify your attendance.",
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            const CircleAvatar(
-              radius: 100,
-              backgroundColor: const Color(0xFFFFFFFF),
-              child: Icon(Icons.person, size: 120, color: Colors.white),
-            ),
-            const Spacer(),
+                    const Spacer(),
+                    const Text(
+                      "Verifying...",
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Poppins",
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Please align your face within the circle\nto verify your attendance.",
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 40),
+                    const CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Color(0xFFFFFFFF),
+                      child: Icon(Icons.person, size: 120, color: Colors.white),
+                    ),
+                    const Spacer(),
                   ],
                 ),
               ),

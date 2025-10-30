@@ -7,7 +7,7 @@ class ApiConfig {
   // The app will automatically try each URL until one works
   static const List<String> serverUrls = [
     // Option 1: Your computer's IP address (most common)
-    'http://192.168.100.26:8000/api',
+    'http://192.168.100.17:8000/api',
     
     // Option 2: Alternative IP address (if your IP changes)
     'http://192.168.1.100:8000/api',
@@ -20,6 +20,7 @@ class ApiConfig {
     
     // Option 5: Add your own server URLs here
     // 'http://YOUR_IP_ADDRESS:8000/api',
+    "http://127.0.0.1:8000/api",
   ];
   
   // Connection timeout settings (in seconds)

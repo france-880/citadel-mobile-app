@@ -12,7 +12,6 @@ class QrScannerScreen extends StatefulWidget {
 
 class _QrScannerScreenState extends State<QrScannerScreen> {
   bool _isScanning = true;
-  String _scannedData = '';
   MobileScannerController? _scannerController;
   bool _isCameraInitialized = false;
 
@@ -35,14 +34,14 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         facing: CameraFacing.back,
         torchEnabled: false,
       );
-      
+
       if (mounted) {
         setState(() {
           _isCameraInitialized = true;
         });
       }
     } catch (e) {
-      print('Error initializing camera: $e');
+      debugPrint('Error initializing camera: $e');
     }
   }
 
@@ -50,10 +49,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isNotEmpty && mounted && _isScanning) {
       setState(() {
-        _scannedData = barcodes.first.rawValue ?? '';
         _isScanning = false;
       });
-      
+
       // Show success feedback
       HapticFeedback.lightImpact();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,7 +61,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
           duration: Duration(seconds: 2),
         ),
       );
-      
+
       // Navigate to facial verification
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
@@ -106,9 +104,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 ],
               ),
               const SizedBox(height: 4),
-              Expanded(
-                child: _buildQRScanner(),
-              ),
+              Expanded(child: _buildQRScanner()),
             ],
           ),
         ),
@@ -122,7 +118,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         const SizedBox(height: 20),
         const Text(
           "Scan QR Code",
-          style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold, fontFamily: "Poppins"),
+          style: TextStyle(
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Poppins",
+          ),
         ),
         const SizedBox(height: 8),
         const Text(
@@ -130,7 +130,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30),
-        
+
         // Camera Preview Area
         Expanded(
           child: Container(
@@ -174,7 +174,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                         ),
                       ),
                     ),
-                  
+
                   // Status Text Overlay
                   Positioned(
                     bottom: 50,
@@ -183,7 +183,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        _isScanning ? "Point camera at QR code" : "QR Code Detected!",
+                        _isScanning
+                            ? "Point camera at QR code"
+                            : "QR Code Detected!",
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,

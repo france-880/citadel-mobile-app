@@ -1,11 +1,57 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class QRCodePage extends StatelessWidget {
+class QRCodePage extends StatefulWidget {
   const QRCodePage({super.key});
 
   @override
+  State<QRCodePage> createState() => _QRCodePageState();
+}
+
+class _QRCodePageState extends State<QRCodePage> {
+  Timer? _timer;
+  int _countdown = 10;
+  String _qrData = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _generateQRCode();
+    _startCountdown();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _generateQRCode() {
+    // Generate unique QR code with timestamp
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    setState(() {
+      _qrData = "https://ucc-attendance.com/confirm?token=$timestamp";
+    });
+  }
+
+  void _startCountdown() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_countdown > 0) {
+          _countdown--;
+        } else {
+          // Reset countdown and generate new QR code
+          _countdown = 10;
+          _generateQRCode();
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
@@ -16,37 +62,17 @@ class QRCodePage extends StatelessWidget {
               // 🔹 Custom AppBar (like AttendancePage)
               Row(
                 children: [
-                  // 🔸 Back Button (updated style)
-                  Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withAlpha(77),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Color(0xFF000000),
-                          size: 24,
-                        ),
-                      ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.black87,
                     ),
+                    onPressed: () => Navigator.pop(context),
                   ),
 
-                  const SizedBox(width: 48), // same width as back button to center title
+                  const SizedBox(
+                    width: 48,
+                  ), // same width as back button to balance
                 ],
               ),
               const SizedBox(height: 32),
@@ -59,20 +85,12 @@ class QRCodePage extends StatelessWidget {
                     const Text(
                       "Scan QR Code",
                       style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
                         fontFamily: "Poppins",
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      "Done! Your QR Code is ready to use",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: "Sora",
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                   
                     const SizedBox(height: 30),
                     Container(
                       padding: const EdgeInsets.all(20),
@@ -89,14 +107,56 @@ class QRCodePage extends StatelessWidget {
                         ],
                       ),
                       child: QrImageView(
-                        data: "https://ucc-attendance.com/confirm",
+                        data: _qrData,
                         version: QrVersions.auto,
                         size: 250,
-                        // ignore: deprecated_member_use
-                        foregroundColor: Colors.black,
+                        // Use app theme colors so the QR adapts to the app theme.
+                        dataModuleStyle: QrDataModuleStyle(color: primaryColor),
+                        eyeStyle: QrEyeStyle(
+                          eyeShape: QrEyeShape.circle,
+                          color: primaryColor,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
+                    
+                    // 🔹 Countdown Timer Display
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: primaryColor.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.timer_outlined,
+                            color: primaryColor,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "New code in: $_countdown seconds",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Sora",
+                              fontWeight: FontWeight.w600,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 20),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Text(

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'password_changed.dart';
+import 'login_page.dart';
+import '../services/api_service.dart';
+import 'dart:convert';
 
 class SetNewPasswordPage extends StatefulWidget {
-  const SetNewPasswordPage({super.key});
+  final String? email;
+  final String? token;
+
+  const SetNewPasswordPage({super.key, this.email, this.token});
 
   @override
   State<SetNewPasswordPage> createState() => _SetNewPasswordPageState();
@@ -14,21 +20,102 @@ class _SetNewPasswordPageState extends State<SetNewPasswordPage> {
       TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _isLoading = false;
 
-  void _changePassword() {
-    if (_passwordController.text == _confirmPasswordController.text &&
-        _passwordController.text.isNotEmpty) {
+  Future<void> _changePassword() async {
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+
+    // Validation
+    if (password.isEmpty || confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password changed successfully!")),
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+        ),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const PasswordChangedPage()),
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords do not match!'),
+          backgroundColor: Colors.red,
+        ),
       );
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Passwords do not match!")));
+      return;
+    }
+
+    if (password.length < 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password must be at least 8 characters'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check if email and token are provided
+    if (widget.email == null || widget.token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid reset link. Please request a new one.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await ApiService.post('reset-password', {
+        'email': widget.email,
+        'token': widget.token,
+        'password': password,
+        'password_confirmation': confirmPassword,
+      });
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (response.statusCode == 200) {
+        // Success
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const PasswordChangedPage()),
+        );
+      } else {
+        // Error response
+        final errorData = jsonDecode(response.body);
+        final errorMessage = errorData['error'] ?? errorData['message'] ?? 'Failed to reset password';
+        
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Connection error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -214,22 +301,32 @@ class _SetNewPasswordPageState extends State<SetNewPasswordPage> {
                           SizedBox(
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: _changePassword,
+                              onPressed: _isLoading ? null : _changePassword,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFFF9800),
+                                disabledBackgroundColor: Colors.grey,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: const Text(
-                                'Change',
-                                style: TextStyle(
-                                  fontFamily: 'Sora',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              child: _isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Change',
+                                      style: TextStyle(
+                                        fontFamily: 'Sora',
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],

@@ -10,30 +10,44 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
 
-    // NAVIGATE TO LOGIN PAGE AFTER 3 SECONDS
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
+    // Only one Timer, no duplicated navigation calls
+    _timer = Timer(const Duration(seconds: 3), () {
+      if (!mounted) return; // <- ensures the widget still exists
+      Navigator.of(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
     });
   }
 
   @override
+  void dispose() {
+    // cancel the timer before widget is destroyed
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/images/ucc_logo.png", width: 250, height: 310),
-            const SizedBox(height: 5),
-            const Text(
+            // Replace with your actual asset path
+            Image(
+              image: AssetImage("assets/images/ucc_logo.png"),
+              width: 250,
+              height: 310,
+            ),
+            SizedBox(height: 5),
+            Text(
               "UCC",
               style: TextStyle(
                 fontFamily: 'Sora',

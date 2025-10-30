@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';  
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart' as image_picker;
+import 'package:intl/intl.dart';
+import '../providers/auth_providers.dart';
+import 'avatar_generator.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
+  String _formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return "—";
+    try {
+      final date = DateTime.parse(dateStr);
+      return DateFormat('MMMM dd, yyyy').format(date);
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  String _formatRole(String role) {
+    switch (role.toLowerCase()) {
+      case 'prof':
+      case 'professor':
+        return 'Professor';
+      case 'program_head':
+      case 'program-head':
+        return 'Program Head';
+      case 'dean':
+        return 'Dean';
+      default:
+        return role;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const accentGreen = Color(0xFF4CAF50);
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.user;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
@@ -65,25 +96,12 @@ class Profile extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: accentGreen, width: 2),
-                            boxShadow: [
-                              BoxShadow(
-                                // ignore: deprecated_member_use
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            radius: 56,
-                            backgroundImage: AssetImage(
-                              "assets/images/profile_picture.jpg",
-                            ),
-                          ),
+                        AvatarGenerator.buildAvatarWithBorder(
+                          fullName: user?.fullname,
+                          radius: 56,
+                          imageUrl: user?.photoUrl,
+                          borderColor: accentGreen,
+                          borderWidth: 2,
                         ),
                         Positioned(
                           bottom: 0,
@@ -93,32 +111,12 @@ class Profile extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      "Dumbledore Hogwarts",
-                      style: TextStyle(
+                    Text(
+                      user?.fullname ?? "User",
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         fontFamily: "Sora",
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Professor",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Trispace",
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "CSD Department",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "Sora",
-                        color: Colors.black87,
                       ),
                     ),
                   ],
@@ -128,21 +126,41 @@ class Profile extends StatelessWidget {
               const SizedBox(height: 32),
 
               // 📋 Profile Details Section
-              const ProfileInfoTile(
-                icon: Icons.cake_outlined,
-                label: "Birthday",
-                value: "January 1, 2000",
+              if (user?.dob != null)
+                ProfileInfoTile(
+                  icon: Icons.cake_outlined,
+                  label: "Birthday",
+                  value: _formatDate(user?.dob),
+                ),
+              ProfileInfoTile(
+                icon: Icons.work_outline,
+                label: "Role",
+                value: _formatRole(user?.role ?? ""),
               ),
-              const ProfileInfoTile(
-                icon: Icons.school_outlined,
-                label: "Year & Section",
-                value: "2nd Year - A",
-              ),
-              const ProfileInfoTile(
-                icon: Icons.home_outlined,
-                label: "Address",
-                value: "1112 Strawberry St. Nicholas, Caloocan City",
-              ),
+              if (user?.email != null && user!.email!.isNotEmpty)
+                ProfileInfoTile(
+                  icon: Icons.email_outlined,
+                  label: "Email",
+                  value: user.email!,
+                ),
+              if (user?.contact != null && user!.contact!.isNotEmpty)
+                ProfileInfoTile(
+                  icon: Icons.phone_outlined,
+                  label: "Contact",
+                  value: user.contact!,
+                ),
+              if (user?.address != null && user!.address!.isNotEmpty)
+                ProfileInfoTile(
+                  icon: Icons.home_outlined,
+                  label: "Address",
+                  value: user.address!,
+                ),
+              if (user?.gender != null && user!.gender!.isNotEmpty)
+                ProfileInfoTile(
+                  icon: Icons.person_outline,
+                  label: "Gender",
+                  value: user.gender!,
+                ),
             ],
           ),
         ),
@@ -152,7 +170,9 @@ class Profile extends StatelessWidget {
 
   // 📸 Reusable Camera Button Widget
   Widget _buildCameraButton(BuildContext context) {
-    final ImagePicker picker = ImagePicker();
+    final image_picker.ImagePicker picker = image_picker.ImagePicker();
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.user;
 
     return GestureDetector(
       onTap: () {
@@ -197,10 +217,10 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const CircleAvatar(
+                    AvatarGenerator.buildAvatar(
+                      fullName: user?.fullname,
                       radius: 56,
-                      backgroundImage:
-                          AssetImage("assets/images/profile_picture.jpg"),
+                      imageUrl: user?.photoUrl,
                     ),
                     const SizedBox(height: 24),
 
@@ -208,8 +228,8 @@ class Profile extends StatelessWidget {
                       icon: Icons.photo_camera,
                       label: "Take a Photo",
                       onPressed: () async {
-                        final XFile? image =
-                            await picker.pickImage(source: ImageSource.camera);
+                        final image_picker.XFile? image =
+                            await picker.pickImage(source: image_picker.ImageSource.camera);
                         if (image != null) {
                           // ignore: avoid_print
                           print("Camera image: ${image.path}");
@@ -223,8 +243,8 @@ class Profile extends StatelessWidget {
                       icon: Icons.photo_library,
                       label: "Choose from Gallery",
                       onPressed: () async {
-                        final XFile? image =
-                            await picker.pickImage(source: ImageSource.gallery);
+                        final image_picker.XFile? image =
+                            await picker.pickImage(source: image_picker.ImageSource.gallery);
                         if (image != null) {
                           // ignore: avoid_print
                           print("Gallery image: ${image.path}");

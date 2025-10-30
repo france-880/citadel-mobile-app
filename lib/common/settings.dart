@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
-import '../common/login_page.dart';
-import '../common/profile.dart';
-import '../common/faq.dart';
-import '../common/get_in_touch_with_us.dart';
-
+import 'package:provider/provider.dart';
+import 'login_page.dart';
+import 'profile.dart';
+import 'faq.dart';
+import 'get_in_touch_with_us.dart';
+import '../providers/auth_providers.dart';
+import 'avatar_generator.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
+  String _formatRole(String role) {
+    // Format role for display
+    switch (role.toLowerCase()) {
+      case 'prof':
+      case 'professor':
+        return 'Professor';
+      case 'program_head':
+      case 'program-head':
+        return 'Program Head';
+      case 'dean':
+        return 'Dean';
+      default:
+        return role;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.user;
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
@@ -34,34 +55,36 @@ class Settings extends StatelessWidget {
 
               Row(
                 children: [
-                  const CircleAvatar(
+                  AvatarGenerator.buildAvatar(
+                    fullName: user?.fullname,
                     radius: 35,
-                    backgroundImage: AssetImage(
-                      "assets/images/profile_picture.jpg",
-                    ),
+                    imageUrl: user?.photoUrl,
                   ),
                   const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Dumbledore Hogwarts",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          fontFamily: "Sora",
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user?.fullname ?? "User",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontFamily: "Sora",
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        "Professor",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: "Trispace",
+                        const SizedBox(height: 4),
+                        Text(
+                          _formatRole(user?.role ?? ""),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: "Trispace",
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

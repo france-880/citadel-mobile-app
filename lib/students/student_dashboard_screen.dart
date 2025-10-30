@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'my_schedule_screen.dart';
-import 'settings.dart';
+import '../common/settings.dart';
 import 'logs_screen.dart'; // ✅ Import LogsScreen
 
 class StudentDashboardScreen extends StatefulWidget {
@@ -34,7 +34,7 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1 * 255).round()),
               offset: const Offset(0, -2),
               blurRadius: 4,
               spreadRadius: 0,
@@ -50,8 +50,14 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
           unselectedItemColor: Colors.grey,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Dashboard"),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "My Schedule"),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: "My Schedule",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "Settings",
+            ),
           ],
         ),
       ),
@@ -63,8 +69,41 @@ class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
 class _DashboardHome extends StatelessWidget {
   const _DashboardHome();
 
+  String _formatDate(DateTime dt) {
+    const weekdays = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
+    const months = [
+      '',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    final weekday = weekdays[dt.weekday - 1];
+    final month = months[dt.month];
+    return '$weekday, $month ${dt.day}, ${dt.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final today = _formatDate(DateTime.now());
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
@@ -73,114 +112,234 @@ class _DashboardHome extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Dashboard",
-                style: TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "Poppins",
-                ),
+              // Greeting Header (matching Professor style)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Hello Student,\nWelcome Back!",
+                      style: const TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Poppins",
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ),
+                  Material(
+                    elevation: 1,
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyScheduleScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              width: 15,
+                              height: 2,
+                              decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            Container(
+                              width: 23,
+                              height: 2,
+                              decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            Container(
+                              width: 15,
+                              height: 2,
+                              decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 4),
+              Text(
+                today,
+                style: const TextStyle(
+                  fontFamily: "Roboto",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: Color(0xFF8C8C8C),
+                ),
+              ),
+              const SizedBox(height: 20),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-              // Your next class
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Your next class",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      // Your next class
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(
+                                (0.05 * 255).round(),
+                              ),
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          "IT 101",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Your next class",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  "IT 101",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "Computer Programming",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Icon(
+                              Icons.bookmark_border,
+                              size: 32,
+                              color: Colors.green,
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Computer Programming",
-                          style: TextStyle(fontSize: 14, color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                    const Icon(Icons.bookmark_border, size: 32, color: Colors.green),
-                  ],
-                ),
-              ),
+                      ),
 
-              const SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
-            // Today Classes
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-                const Text(
-                "Today Classes",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                GestureDetector(
-                onTap: () {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyScheduleScreen()),
-                    );
-                },
-                child: const Text("See all", style: TextStyle(color: Colors.green)),
-                ),
-            ],
-            ),
-              const SizedBox(height: 12),
+                      // Today Classes
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Today Classes",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MyScheduleScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "See all",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
 
-              _classCard("7:00 AM", "Object-Oriented Programming", "Room 301 - North", "Mr. Juan Dela Cruz"),
-              const SizedBox(height: 12),
-              _classCard("10:00 AM", "Life and Works of Rizal", "Room 102 - North", "Ms. Jane Lopez"),
+                      _classCard(
+                        "7:00 AM",
+                        "Object-Oriented Programming",
+                        "Room 301 - North",
+                        "Mr. Juan Dela Cruz",
+                      ),
+                      const SizedBox(height: 12),
+                      _classCard(
+                        "10:00 AM",
+                        "Life and Works of Rizal",
+                        "Room 102 - North",
+                        "Ms. Jane Lopez",
+                      ),
 
-              const SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
-              // Your Logs
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Your Logs",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LogsScreen()),
-                      );
-                    },
-                    child: const Text("See all", style: TextStyle(color: Colors.green)),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
+                      // Your Logs
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Your Logs",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LogsScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "See all",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
 
-              _logCard("Time In", "You entered in campus at 6:45AM", "06:48 AM"),
-              const SizedBox(height: 12),
-              _logCard("Class", "Your next class will start in 10 minutes", "06:50 AM"),
+                      _logCard(
+                        "Time In",
+                        "You entered in campus at 6:45AM",
+                        "06:48 AM",
+                      ),
+                      const SizedBox(height: 12),
+                      _logCard(
+                        "Class",
+                        "Your next class will start in 10 minutes",
+                        "06:50 AM",
+                      ),
                     ],
                   ),
                 ),
@@ -193,7 +352,12 @@ class _DashboardHome extends StatelessWidget {
   }
 
   // Class card widget
-  static Widget _classCard(String time, String subject, String room, String teacher) {
+  static Widget _classCard(
+    String time,
+    String subject,
+    String room,
+    String teacher,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -201,7 +365,7 @@ class _DashboardHome extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).round()),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
@@ -211,16 +375,32 @@ class _DashboardHome extends StatelessWidget {
         children: [
           Text(
             time,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(subject, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                Text(room, style: const TextStyle(fontSize: 14, color: Colors.black54)),
-                Text(teacher, style: const TextStyle(fontSize: 14, color: Colors.black54)),
+                Text(
+                  subject,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  room,
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                Text(
+                  teacher,
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
               ],
             ),
           ),
@@ -238,7 +418,7 @@ class _DashboardHome extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).round()),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
@@ -254,7 +434,10 @@ class _DashboardHome extends StatelessWidget {
             ),
             child: Text(
               title,
-              style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(width: 12),
